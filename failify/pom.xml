@@ -51,5 +51,11 @@
             <version>1.2.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency> <!-- Spark dependency -->
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.12</artifactId>
+            <version>2.4.3</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
