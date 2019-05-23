@@ -19,7 +19,7 @@ public class FailifyHelper {
         String version = "2.4.3"; // this can be dynamically generated from maven metadata
         String dir = "spark-" + version + "-bin-custom-spark";
         Deployment.Builder builder = Deployment.builder("example-spark")
-            .withService("zk").dockerImageName("zookeeper").disableClockDrift().and().withNode("zk1", "zk").and()
+            .withService("zk").dockerImageName("zookeeper:3.4.14").disableClockDrift().and().withNode("zk1", "zk").and()
             .withService("spark-master")
                 .applicationPath("../spark-2.4.3-build/" + dir + ".tar.gz", "/spark", PathAttr.COMPRESSED)
                 .workDir("/spark/" + dir).startCommand("sbin/start-master.sh")
