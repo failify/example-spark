@@ -2,6 +2,7 @@ package io.failify.examples.spark;
 
 import io.failify.FailifyRunner;
 import io.failify.exceptions.RuntimeEngineException;
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.Dataset;
@@ -41,8 +42,9 @@ public class SampleTest {
     @Test
     public void sampleTest() throws RuntimeEngineException, SQLException, ClassNotFoundException, TimeoutException {
         String logFile = "README.md"; // Should be some file on your system
-        SparkSession spark = SparkSession.builder().master(FailifyHelper.getClientMasterString(runner, NUM_OF_MASTERS))
-                .appName("Simple Application").getOrCreate();
+        SparkConf conf = new SparkConf();
+        conf.setMaster(FailifyHelper.getClientMasterString(runner, NUM_OF_MASTERS));
+        SparkSession spark = SparkSession.builder().config(conf).appName("test").getOrCreate();
 
         Dataset<String> logData = spark.read().textFile(logFile).cache();
 
