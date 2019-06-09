@@ -18,10 +18,10 @@ public class FailifyHelper {
         String version = "2.4.3"; // this can be dynamically generated from maven metadata
         String dir = "spark-" + version + "-bin-custom-spark";
         return Deployment.builder("example-spark")
-            .withService("zk").dockerImgName("zookeeper:3.4.14").disableClockDrift().and().withNode("zk1", "zk").and()
+            .withService("zk").dockerImg("zookeeper:3.4.14").disableClockDrift().and().withNode("zk1", "zk").and()
             .withService("spark-base")
                 .appPath("../spark-2.4.3-build/" + dir + ".tar.gz", "/spark", PathAttr.COMPRESSED)
-                .dockerImgName("failify/spark:1.0").dockerFileAddr("docker/Dockerfile", true)
+                .dockerImg("failify/spark:1.0").dockerFile("docker/Dockerfile", true)
                 .workDir("/spark/" + dir).logDir("/spark/" + dir + "/logs").serviceType(ServiceType.SCALA).and()
             .withService("spark-master", "spark-base")
                 .startCmd("sbin/start-master.sh").tcpPort(7077)
