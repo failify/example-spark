@@ -18,7 +18,7 @@ public class FailifyHelper {
         String version = "2.4.3"; // this can be dynamically generated from maven metadata
         String dir = "spark-" + version + "-bin-custom-spark";
         return Deployment.builder("example-spark")
-            .withService("zk").dockerImg("zookeeper:3.4.14").disableClockDrift().and().withNode("zk1", "zk").and()
+            .withService("zk").dockerImg("failify/zk:3.4.14").dockerFile("docker/zk", true).disableClockDrift().and()
             .withService("spark-base")
                 .appPath("../spark-2.4.3-build/" + dir + ".tar.gz", "/spark", PathAttr.COMPRESSED)
                 .dockerImg("failify/spark:1.0").dockerFile("docker/Dockerfile", true)
@@ -28,8 +28,8 @@ public class FailifyHelper {
                 .env("SPARK_DAEMON_JAVA_OPTS", "-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=zk1:2181 "
                         + "-Dzookeeper.sasl.client=false").and().nodeInstances(numOfMasters, "master", "spark-master", true)
             .withService("spark-slave", "spark-base")
-                .startCmd("sbin/start-slave.sh -c 1 -m 1G " + getMasterString(numOfMasters))
-                .and().nodeInstances(numOfSlaves, "slave", "spark-slave", true).build();
+                .startCmd("sbin/start-slave.sh -c 1 -m 1G " + getMasterString(numOfMasters)).and()
+            .nodeInstances(numOfSlaves, "slave", "spark-slave", true).withNode("zk1", "zk").and().build();
     }
 
     private static String getMasterString(int numOfMasters) {
